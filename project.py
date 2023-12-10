@@ -2,19 +2,36 @@ import tkinter as tk
 import random
 
 # Makes the chart given the gender and generation
-def generate_deafnessType():
-    deafness_type = "Not Deaf"
+
+#This should be edited to make DFNX 
+def generate_deafnessType(personDeafness):
+    deafness_type = personDeafness
     # Simulate inheritance based on Mendelian genetics
 
-    if random.random() < 0.55:
-        if random.random() < 0.85:
-            deafness_type = "DFNB"
-        elif 0.85 <= random.random() < 0.99:
-            deafness_type = "DFNA"
-        else:
-            deafness_type = "DFNX"
+    if deafness_type == "DFNA":
+        return deafness_type
+    elif deafness_type == "DFNB":
+        '''people with DFNB have three different options when 
+        it comes to partners DFNB deaf (about a 4.9% chance to choose someone with DFNB type deafness partner with this type of defaness), 
+        DFNB carrier, and not deaf
+        you could just kinda'''
+        return deafness_type
+    else:
+       '''DFNX goes here if the person choosen by the user is a female
+       any male off spring will be deaf and any femal offspring 
+       would be determine if the father also has DFNX gene'''
 
-    return deafness_type
+
+
+    # if random.random() < 0.55:
+    #     if random.random() < 0.85:
+    #         deafness_type = "DFNB"
+    #     elif 0.85 <= random.random() < 0.99:
+    #         deafness_type = "DFNA"
+    #     else:
+    #         deafness_type = "DFNX"
+
+    #return deafness_type
 
 
 def draw_female_info(x, y, deafnessType):
@@ -37,9 +54,13 @@ def create_family_tree():
     #initial generation
     if gender == "Female":
         draw_female_info(canvas_width // 2, vertical_spacing * 5, deafness)
+
+        #Don't need to add a deafness type to a list the user already chose it
         deafness_types.append(deafness)
     else:
         draw_male_info(canvas_width // 2, vertical_spacing * 5, deafness)
+
+        #same here
         deafness_types.append(deafness)
     
     # Store coordinates of the last generation's individuals
@@ -48,8 +69,10 @@ def create_family_tree():
     for i in range(1, generations + 1):
         current_generation_coords = []
         for j in range(2**i):
-            deafness_type = generate_deafnessType()
-            deafness_types.append(deafness_type)
+            deafness_type = generate_deafnessType(deafness)
+
+            
+            #deafness_types.append(deafness_type)
 
             # Calculate x and y coordinates based on generation and position
             if i == 1 or j == 0:
@@ -83,6 +106,7 @@ root = tk.Tk()
 root.title("project.py")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
+#Window Size 
 root.geometry(f"{screen_width}x{screen_height}")
 
 canvas_width = 1000
@@ -134,7 +158,8 @@ generation_result_label.place(x=100, y=475)
 generation_submit_button = tk.Button(root, text="Create Chart", command = create_family_tree)
 generation_submit_button.place(x=150, y=500)
 
-canvas = tk.Canvas(root, width=canvas_width, height=screen_height, highlightthickness=1, highlightbackground="black")
+#Chart sizes
+canvas = tk.Canvas(root, width=canvas_width, height=screen_height, highlightthickness=1, highlightbackground="black")  
 canvas.place(x=350, y=150)
 
 
