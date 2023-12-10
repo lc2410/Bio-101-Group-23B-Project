@@ -12,9 +12,23 @@ def generate_deafnessType(personDeafness):
         return deafness_type
     elif deafness_type == "DFNB":
         '''people with DFNB have three different options when 
-        it comes to partners DFNB deaf (about a 4.9% chance to choose someone with DFNB type deafness partner with this type of defaness), 
-        DFNB carrier, and not deaf
-        you could just kinda'''
+        it comes to partners 
+        
+        DFNB deaf 
+        about a 4.9% chance to choose someone with DFNB type deafness partner 
+        with this type of defaness need more data on percentage that are DFNB 
+        and are male and DFNB and female <-- most likely not gonna get this info so might benefit to make this part 50-50
+
+        DFNB carrier 
+        (not sure about this one)
+
+        not deaf
+        ()
+
+        Also for DFNB carrier and not deaf could just have it be an else statement 
+        that is a 50% chance between carrer and not deaf partner
+
+        alternative option just make it a 33% chance for each option'''
         return deafness_type
     else:
        '''DFNX goes here if the person choosen by the user is a female
