@@ -2,39 +2,100 @@ import tkinter as tk
 import random
 
 # Makes the chart given the gender and generation
-
 #This should be edited to make DFNX 
-def generate_deafnessType(personDeafness):
-    deafness_type = personDeafness
+def generate_deafnessType(offSpringGenes, offSpringGender, previousParentGenes = "", previousParentGender = ""):
     # Simulate inheritance based on Mendelian genetics
 
-    if deafness_type == "DFNA":
-        return deafness_type
-    elif deafness_type == "DFNB":
-        '''people with DFNB have three different options when 
-        it comes to partners 
+    if offSpringGenes == "DFNA":
+        if(previousParentGenes == "DFNA"):
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "Not Deaf"
+            else:
+                return "DFNA"
+        else:
+            return "DFNA"
+
+    elif offSpringGenes == "DFNB":
+        if previousParentGenes == "DFNB":
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNB"
+            else:
+                return "DFNB Carrier"
+        elif previousParentGenes == "DFNB Carrier":
+            return "DFNB"
+        else:
+            return "DFNB"
+    
+     
+    elif offSpringGenes == "DFNB Carrier":
+        if previousParentGenes == "DFNB":
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNB Carrier"
+            else:
+                return "Not Deaf"
+        elif previousParentGenes == "DFNB Carrier":
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNB Carrier"
+            else:
+                return "Not Deaf"
+        else:
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNB Carrier"
+            else:
+                return "DFNB"
+
+    #Female offspring (DFNX) XX-linked
+    elif offSpringGenes == "DFNX" and offSpringGender == "Female":
+        if (previousParentGenes == "DFNX" and previousParentGender == "Female") or (previousParentGenes == "DFNX Carrier" and previousParentGender == "Female"):
+            #Male has to be (DNFX) XY
+            return "DNFX"
+        else:
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNX Carrier"
+            else:
+                return "DFNX"
+            
+    
+    elif offSpringGenes == "DFNX" and offSpringGender == "Male":
+        if (previousParentGenes == "DFNX" or previousParentGenes == "DFNX Carrier"):
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNX"
+            else:
+                return "Not Deaf"
+            
+        elif previousParentGenes == "Not Deaf" and previousParentGender == "Female":
+            return "DFNX"
         
-        DFNB deaf 
-        about a 4.9% chance to choose someone with DFNB type deafness partner 
-        with this type of defaness need more data on percentage that are DFNB 
-        and are male and DFNB and female <-- most likely not gonna get this info so might benefit to make this part 50-50
+        else:
+            rand = random.randint(0,2)
+            if(rand == 0):
+                return "DFNX Carrier"
+            elif(rand == 1):
+                return "Not Deaf"
+            else:
+                return "DFNX"
 
-        DFNB carrier 
-        (not sure about this one)
+    elif offSpringGenes == "DFNX Carrier" and offSpringGender == "Female":
+        if (previousParentGenes == "DFNX" and previousParentGender == "Female") or (previousParentGenes == "DFNX Carrier" and previousParentGender == "Female"):
+            return "Not Deaf"
+        else:
+            rand = random.randint(0,1)
+            if(rand == 0):
+                return "DFNX Carrier"
+            else:
+                return "DFNX"
 
-        not deaf
-        ()
-
-        Also for DFNB carrier and not deaf could just have it be an else statement 
-        that is a 50% chance between carrer and not deaf partner
-
-        alternative option just make it a 33% chance for each option'''
-        return deafness_type
     else:
-       '''DFNX goes here if the person choosen by the user is a female
-       any male off spring will be deaf and any femal offspring 
-       would be determine if the father also has DFNX gene'''
+        return "Not Deaf"
 
+    
 
 
     # if random.random() < 0.55:
@@ -60,33 +121,38 @@ def draw_male_info(x, y, deafnessType):
 def create_family_tree():
     generations = int(generation_var.get())
     gender = gender_var.get()
-    deafness = DeafnessType_var.get()
+    offspringDeafness = DeafnessType_var.get()
     canvas.delete("all")  # Clear the canvas before drawing
     # Store generated deafness types for each individual
     deafness_types = []
+    genders = []
 
     #initial generation
     if gender == "Female":
-        draw_female_info(canvas_width // 2, vertical_spacing * 5, deafness)
+        draw_female_info(canvas_width // 2, vertical_spacing * 5, offspringDeafness)
 
-        #Don't need to add a deafness type to a list the user already chose it
-        deafness_types.append(deafness)
     else:
-        draw_male_info(canvas_width // 2, vertical_spacing * 5, deafness)
+        draw_male_info(canvas_width // 2, vertical_spacing * 5, offspringDeafness)
 
-        #same here
-        deafness_types.append(deafness)
+    deafness_types.append(offspringDeafness)
+    genders.append(gender)
     
     # Store coordinates of the last generation's individuals
     last_generation_coords = [(canvas_width // 2, vertical_spacing * 5)]
 
+    counter = 0
+    index = 0
+
     for i in range(1, generations + 1):
         current_generation_coords = []
         for j in range(2**i):
-            deafness_type = generate_deafnessType(deafness)
 
-            
-            #deafness_types.append(deafness_type)
+            if counter == 2:
+                index += 1
+                offspringDeafness = deafness_types[index]
+                gender = genders[index]
+                print(str(index) + ". " + gender)
+                counter = 0
 
             # Calculate x and y coordinates based on generation and position
             if i == 1 or j == 0:
@@ -99,11 +165,20 @@ def create_family_tree():
             y = vertical_spacing * (5 - i)
 
             current_generation_coords.append((x, y))
+            
 
             if j % 2 == 0:
+                deafness_type = generate_deafnessType(offSpringGenes=offspringDeafness, offSpringGender=gender)
+                deafness_types.append(deafness_type)
+                genders.append("Female")
                 draw_female_info(x, y, deafness_type)
+                counter += 1
             else:
+                deafness_type = generate_deafnessType(offSpringGenes=offspringDeafness, offSpringGender=gender, previousParentGenes = deafness_types[len(deafness_types) - 1], previousParentGender=genders[len(genders)-1])
+                deafness_types.append(deafness_type)
+                genders.append("Male")
                 draw_male_info(x, y, deafness_type)
+                counter += 1
 
             
             parent_x, parent_y = last_generation_coords[j // 2]  # Connect to the middle of the parents
