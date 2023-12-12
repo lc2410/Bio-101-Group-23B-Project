@@ -1,112 +1,60 @@
 import tkinter as tk
 import random
 
-# Makes the chart given the gender and generation
-#This should be edited to make DFNX 
-def generate_deafnessType(offSpringGenes, offSpringGender, previousParentGenes = "", previousParentGender = ""):
-    # Simulate inheritance based on Mendelian genetics
 
-    if offSpringGenes == "DFNA":
-        if(previousParentGenes == "DFNA"):
+#generate deafness
+def generate_deafnessType(offSpringdeafnessType="", parent1DeafnessType="", parent2DeafnessType=""):
+    if(offSpringdeafnessType == ""):
+        if(parent1DeafnessType == "Not Deaf" and parent2DeafnessType == "Not Deaf"):
+            return "Not Deaf"
+        elif (parent1DeafnessType == "Not Deaf" and parent2DeafnessType == "DFNB Carrier") or (parent1DeafnessType == "DFNB Carrier" and parent2DeafnessType == "Not Deaf"):
             rand = random.randint(0,1)
-            if(rand == 0):
+            if rand == 0:
                 return "Not Deaf"
             else:
-                return "DFNA"
-        else:
-            return "DFNA"
-
-    elif offSpringGenes == "DFNB":
-        if previousParentGenes == "DFNB":
-            rand = random.randint(0,1)
-            if(rand == 0):
+                return "DFNB Carrier"
+        elif (parent1DeafnessType == "DFNB Carrier" and parent2DeafnessType == "DFNB Carrier"):
+            rand = random.randint(0,3)
+            if rand == 0:
+                return "Not Deaf"
+            elif rand == 1:
                 return "DFNB"
             else:
                 return "DFNB Carrier"
-        elif previousParentGenes == "DFNB Carrier":
+        elif (parent1DeafnessType == "DFNB" and parent2DeafnessType == "DFNB"):
             return "DFNB"
-        else:
-            return "DFNB"
-    
-     
-    elif offSpringGenes == "DFNB Carrier":
-        if previousParentGenes == "DFNB":
+        elif (parent1DeafnessType == "DFNB" and parent2DeafnessType == "DFNB Carrier") or (parent1DeafnessType == "DFNB Carrier" and parent2DeafnessType == "DFNB"):
+            print("true")
             rand = random.randint(0,1)
-            if(rand == 0):
-                return "DFNB Carrier"
-            else:
-                return "Not Deaf"
-        elif previousParentGenes == "DFNB Carrier":
-            rand = random.randint(0,1)
-            if(rand == 0):
-                return "DFNB Carrier"
-            else:
-                return "Not Deaf"
-        else:
-            rand = random.randint(0,1)
-            if(rand == 0):
-                return "DFNB Carrier"
-            else:
+            if rand == 0:
                 return "DFNB"
-
-    #Female offspring (DFNX) XX-linked
-    elif offSpringGenes == "DFNX" and offSpringGender == "Female":
-        if (previousParentGenes == "DFNX" and previousParentGender == "Female") or (previousParentGenes == "DFNX Carrier" and previousParentGender == "Female"):
-            #Male has to be (DNFX) XY
-            return "DNFX"
-        else:
-            rand = random.randint(0,1)
-            if(rand == 0):
-                return "DFNX Carrier"
             else:
-                return "DFNX"
-            
-    
-    elif offSpringGenes == "DFNX" and offSpringGender == "Male":
-        if (previousParentGenes == "DFNX" or previousParentGenes == "DFNX Carrier"):
-            rand = random.randint(0,1)
-            if(rand == 0):
-                return "DFNX"
-            else:
-                return "Not Deaf"
-            
-        elif previousParentGenes == "Not Deaf" and previousParentGender == "Female":
-            return "DFNX"
+                return "DFNB Carrier"
+        elif parent1DeafnessType == "DFNB" and parent2DeafnessType == "Not Deaf":
+            return "DFNB Carrier"
         
         else:
-            rand = random.randint(0,2)
-            if(rand == 0):
-                return "DFNX Carrier"
-            elif(rand == 1):
-                return "Not Deaf"
+            rand = random.randint(0, 100)
+            if rand < 13:
+                return "DFNB"
             else:
-                return "DFNX"
-
-    elif offSpringGenes == "DFNX Carrier" and offSpringGender == "Female":
-        if (previousParentGenes == "DFNX" and previousParentGender == "Female") or (previousParentGenes == "DFNX Carrier" and previousParentGender == "Female"):
-            return "Not Deaf"
+                rand = random.randint(0, 100)
+                if rand < 3:
+                    return "DFNB Carrier"
+                else:
+                    return "Not Deaf"
+    elif(offSpringdeafnessType == "Not Deaf"):
+        rand = random.randint(0,2)
+        if rand == 0:
+            return "DFNB Carrier"
         else:
-            rand = random.randint(0,1)
-            if(rand == 0):
-                return "DFNX Carrier"
-            else:
-                return "DFNX"
-
+            return "Not Deaf"
     else:
-        return "Not Deaf"
+        print(offSpringdeafnessType)
+        return "DFNB"
 
     
 
-
-    # if random.random() < 0.55:
-    #     if random.random() < 0.85:
-    #         deafness_type = "DFNB"
-    #     elif 0.85 <= random.random() < 0.99:
-    #         deafness_type = "DFNA"
-    #     else:
-    #         deafness_type = "DFNX"
-
-    #return deafness_type
 
 
 def draw_female_info(x, y, deafnessType):
@@ -119,75 +67,73 @@ def draw_male_info(x, y, deafnessType):
 
 
 def create_family_tree():
-    generations = int(generation_var.get())
-    gender = gender_var.get()
-    offspringDeafness = DeafnessType_var.get()
     canvas.delete("all")  # Clear the canvas before drawing
+    generations = int(generation_var.get())
+    parent1PhenoType = parent_1_choice.get()
+    parent2PhenoType = parent_2_choice.get()
+
     # Store generated deafness types for each individual
     deafness_types = []
     genders = []
 
+    #gen 0
+    parent1GenoType = generate_deafnessType(offSpringdeafnessType=parent1PhenoType)
+    parent2GenoType = generate_deafnessType(offSpringdeafnessType=parent2PhenoType)
+
+
     #initial generation
-    if gender == "Female":
-        draw_female_info(canvas_width // 2, vertical_spacing * 5, offspringDeafness)
+    draw_female_info(canvas_width // 5, 200, parent1GenoType)
+    draw_male_info(canvas_width // 5 + 300, 200, parent2GenoType)
 
-    else:
-        draw_male_info(canvas_width // 2, vertical_spacing * 5, offspringDeafness)
-
-    deafness_types.append(offspringDeafness)
-    genders.append(gender)
+    deafness_types.append(parent1GenoType)
+    deafness_types.append(parent2GenoType)
+    genders.append("Female")
+    genders.append("Male")
+    
     
     # Store coordinates of the last generation's individuals
-    last_generation_coords = [(canvas_width // 2, vertical_spacing * 5)]
+    last_generation_coords = [(canvas_width // 5, 200), (canvas_width // 5 + 300, 200)]
 
-    counter = 0
-    index = 0
+    for i in range(1, generations+1):
+        rand = random.randint(0,1)
+        x1 = canvas_width // (5-i)
+        y1 = 200 + (i * vertical_spacing)
 
-    for i in range(1, generations + 1):
-        current_generation_coords = []
-        for j in range(2**i):
-
-            if counter == 2:
-                index += 1
-                offspringDeafness = deafness_types[index]
-                gender = genders[index]
-                print(str(index) + ". " + gender)
-                counter = 0
-
-            # Calculate x and y coordinates based on generation and position
-            if i == 1 or j == 0:
-                x = (canvas_width // (2 + i)) * (j+1)
-            elif i == 2:
-                x = (canvas_width // (2 + i)) + (j * 150)
-            elif i == 3:
-                x = (canvas_width // (2 + i)) + (j * 75)
-
-            y = vertical_spacing * (5 - i)
-
-            current_generation_coords.append((x, y))
-            
-
-            if j % 2 == 0:
-                deafness_type = generate_deafnessType(offSpringGenes=offspringDeafness, offSpringGender=gender)
-                deafness_types.append(deafness_type)
+        x2 = canvas_width // (5-i) + 300
+        y2 = 200 + (i * vertical_spacing)
+        if rand == 0:
+            offspringGenes = generate_deafnessType(parent1DeafnessType=deafness_types[len(deafness_types) - 2], parent2DeafnessType=deafness_types[len(deafness_types) - 1])
+            print(deafness_types)
+            draw_male_info(x1, y1, offspringGenes)
+            genders.append("Male")
+            deafness_types.append(offspringGenes)
+        
+            if(i != generations):
+                partnerGenes = generate_deafnessType()
+                draw_female_info(x2, y2, partnerGenes)
                 genders.append("Female")
-                draw_female_info(x, y, deafness_type)
-                counter += 1
-            else:
-                deafness_type = generate_deafnessType(offSpringGenes=offspringDeafness, offSpringGender=gender, previousParentGenes = deafness_types[len(deafness_types) - 1], previousParentGender=genders[len(genders)-1])
-                deafness_types.append(deafness_type)
-                genders.append("Male")
-                draw_male_info(x, y, deafness_type)
-                counter += 1
-
+                deafness_types.append(partnerGenes)
             
-            parent_x, parent_y = last_generation_coords[j // 2]  # Connect to the middle of the parents
-            offspring_x, offspring_y = x, y
+        else:
+            offspringGenes = generate_deafnessType(parent1DeafnessType=deafness_types[len(deafness_types) - 2], parent2DeafnessType=deafness_types[len(deafness_types) - 1])
+            draw_female_info(x1, y1, offspringGenes)
+            genders.append("Female")
+            deafness_types.append(offspringGenes)
 
-            # Connect from the bottom middle of the parent to the top middle of the offspring
-            canvas.create_line(parent_x, parent_y - 30, offspring_x, offspring_y + 30, fill="black", arrow=tk.FIRST)
+            if(i != generations):
+                partnerGenes = generate_deafnessType()
+                draw_male_info(x2, y2, partnerGenes)
+                genders.append("Male")
+                deafness_types.append(partnerGenes)
 
-        last_generation_coords = current_generation_coords
+        parent1x, parent1y = last_generation_coords[0]
+        parent2x, parent2y = last_generation_coords[1]
+
+        canvas.create_line(parent1x, parent1y+30, x1, y1-30, fill="black", arrow=tk.LAST)
+        canvas.create_line(parent2x, parent2y+30, x1, y1-30, fill="black", arrow=tk.LAST)
+
+        last_generation_coords = [(x1, y1), (x2, y2)]
+
 
 # main code
 print("Initializing project.py...\n")
@@ -205,32 +151,31 @@ proj_title_label = tk.Label(root, text="WELCOME TO BIO PROJECT", font=("Roboto",
 proj_title_label.pack()
 
 # Create StringVars for dropdown menus
-gender_var = tk.StringVar(root)
-DeafnessType_var = tk.StringVar(root)
+parent_1_choice = tk.StringVar(root)
+parent_2_choice = tk.StringVar(root)
 generation_var = tk.StringVar(root)
 
 # Set default values for dropdown menus
-gender_var.set("Select Here")
-DeafnessType_var.set("Select Here")
+parent_1_choice.set("Select Here")
+parent_2_choice.set("Select Here")
 generation_var.set("Select Here")
 
-gender_label = tk.Label(root, text="What gender?", font=("Roboto", 12, 'bold'))
+gender_label = tk.Label(root, text="Parent 1 (female) phenotype?", font=("Roboto", 12, 'bold'))
 gender_label.place(x=100, y=150)
 
-gender_options = ["Male", "Female"]
-gender_menu = tk.OptionMenu(root, gender_var, *gender_options)
+deafness_options = ["Not Deaf", "Deaf"]
+gender_menu = tk.OptionMenu(root, parent_1_choice, *deafness_options)
 gender_menu.config(width=10)
 gender_menu.place(x=100, y=175)
 
-deafness_label = tk.Label(root, text="Deafness Type?", font=("Roboto", 12, 'bold'))
+deafness_label = tk.Label(root, text="Parent 2 (male) phenotype?", font=("Roboto", 12, 'bold'))
 deafness_label.place(x=100, y=275)
 
-deafness_options = ["DFNB", "DFNA", "DFNX"]
-deafness_menu = tk.OptionMenu(root, DeafnessType_var, *deafness_options)
+deafness_menu = tk.OptionMenu(root, parent_2_choice, *deafness_options)
 deafness_menu.config(width=10)
 deafness_menu.place(x=100, y=300)
 
-generation_label = tk.Label(root, text="What generation number?", font=("Roboto", 12, 'bold'))
+generation_label = tk.Label(root, text="What generation number up to?", font=("Roboto", 12, 'bold'))
 generation_label.place(x=100, y=400)
 
 generation_options = ["1", "2", "3"]
@@ -238,11 +183,6 @@ generation_menu = tk.OptionMenu(root, generation_var, *generation_options)
 generation_menu.config(width=10)
 generation_menu.place(x=100, y=425)
 
-gender_result_label = tk.Label(root, text="")
-gender_result_label.place(x=100, y=225)
-
-generation_result_label = tk.Label(root, text="")
-generation_result_label.place(x=100, y=475)
 
 generation_submit_button = tk.Button(root, text="Create Chart", command = create_family_tree)
 generation_submit_button.place(x=150, y=500)
