@@ -29,10 +29,10 @@ def generate_deafnessType(offSpringdeafnessType="", parent1DeafnessType="", pare
                 return "DFNB"
             else:
                 return "DFNB Carrier"
-        elif parent1DeafnessType == "DFNB" and parent2DeafnessType == "Not Deaf":
+        elif (parent1DeafnessType == "DFNB" and parent2DeafnessType == "Not Deaf") or (parent1DeafnessType == "Not Deaf" and parent2DeafnessType == "DFNB"):
             return "DFNB Carrier"
         
-        else:
+        else: #For spouse/partner
             rand = random.randint(0, 100)
             if rand < populationPercentage.get(): # Population percentage
                 return "DFNB"
