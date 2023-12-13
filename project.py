@@ -35,11 +35,11 @@ def generate_deafnessType(offSpringdeafnessType="", parent1DeafnessType="", pare
         
         else:
             rand = random.randint(0, 100)
-            if rand < 13:
+            if rand < populationPercentage.get(): # Population percentage
                 return "DFNB"
             else:
                 rand = random.randint(0, 100)
-                if rand < 3:
+                if rand < carrierPercentage.get(): # Carrier population percentage rounded down (main)
                     return "DFNB Carrier"
                 else:
                     return "Not Deaf"
@@ -66,7 +66,7 @@ def draw_male_info(x, y, deafnessType):
     canvas.create_text(x, y, text=f"{deafnessType}")
 
 
-def create_family_tree():
+def create_family_tree():    
     canvas.delete("all")  # Clear the canvas before drawing
     generations = int(generation_var.get())
     parent1PhenoType = parent_1_choice.get()
@@ -141,6 +141,15 @@ root = tk.Tk()
 root.title("project.py")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
+
+
+#global variables as tk updates
+populationPercentage = tk.IntVar()
+populationPercentage.set(13)
+carrierPercentage = tk.IntVar()
+carrierPercentage.set(3 * int(populationPercentage.get() / 5)) # Rounds down
+
+
 #Window Size 
 root.geometry(f"{screen_width}x{screen_height}")
 
@@ -175,7 +184,7 @@ deafness_menu = tk.OptionMenu(root, parent_2_choice, *deafness_options)
 deafness_menu.config(width=10)
 deafness_menu.place(x=100, y=300)
 
-generation_label = tk.Label(root, text="What generation number up to?", font=("Roboto", 12, 'bold'))
+generation_label = tk.Label(root, text="# of Generations?", font=("Roboto", 12, 'bold'))
 generation_label.place(x=100, y=400)
 
 generation_options = ["1", "2", "3"]
@@ -183,13 +192,36 @@ generation_menu = tk.OptionMenu(root, generation_var, *generation_options)
 generation_menu.config(width=10)
 generation_menu.place(x=100, y=425)
 
+deafPercentage_label = tk.Label(root, text="Deaf Population Percentage?", font=("Roboto", 12, 'bold'))
+deafPercentage_label.place(x=100, y=525)
+
+
+#update carrier label
+#arg is the populationPercentage variable that was sent in deafPercentage_scale
+def updateCarrier(arg):
+    carrierPercentage.set(int(3 * (populationPercentage.get() / 5))) # Rounds down
+    deafCarrier_label2 = tk.Label(root, textvariable=carrierPercentage, font=("Roboto", 8))
+    deafCarrier_label2.place(x=275, y=625)
+
+
+deafPercentage_scale = tk.Scale(root, from_=5, to=20, orient="horizontal", variable=populationPercentage, command=updateCarrier)
+deafPercentage_scale.place(x=100, y=550)
+
+deafPercentage_label2 = tk.Label(root, text=f"Deaf Population Percentage:\t        %", font=("Roboto", 8))
+deafPercentage_label2.place(x=100, y=600)
+deafPercentage_label3 = tk.Label(root, textvariable=populationPercentage, font=("Roboto", 8))
+deafPercentage_label3.place(x=275, y=600)
+
+deafCarrier_label = tk.Label(root, text=f"Deaf Carrier Percentage:\t        %", font=("Roboto", 8))
+deafCarrier_label.place(x=100, y=625)
+
 
 generation_submit_button = tk.Button(root, text="Create Chart", command = create_family_tree)
-generation_submit_button.place(x=150, y=500)
+generation_submit_button.place(x=150, y=675)
 
 #Chart sizes
 canvas = tk.Canvas(root, width=canvas_width, height=screen_height, highlightthickness=1, highlightbackground="black")  
-canvas.place(x=350, y=150)
+canvas.place(x=375, y=150)
 
 
 root.mainloop()
