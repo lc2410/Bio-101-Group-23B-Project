@@ -76,7 +76,7 @@ def draw_male_info(x, y, deafnessType):
 
 
 def create_legend():
-    canvas.create_text(225, 60, text="Legend", font=("Roboto", 20, 'bold'))
+    canvas.create_text(200, 60, text="Legend", font=("Roboto", 20, 'bold'))
     canvas.create_line(0, 80, 400, 80, fill="black")
     canvas.create_line(400, 0, 400, screen_height, fill="black")
     draw_female_info(70, 150, "DFNB")
@@ -97,6 +97,9 @@ def create_legend():
     draw_male_info(70, 650, "Not Deaf")
     canvas.create_text(200, 650, text="Not Deaf (Male)", font=("Roboto", 15, 'bold'))
 
+    canvas.create_text (150, 700, text="*family tree reads top to bottom", font=("Roboto", 15, 'bold'))
+
+    
 def create_family_tree():    
     canvas.delete("all")  # Clear the canvas before drawing
     generations = int(generation_var.get())
