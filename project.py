@@ -24,7 +24,6 @@ def generate_deafnessType(offSpringdeafnessType="", parent1DeafnessType="", pare
         elif (parent1DeafnessType == "DFNB" and parent2DeafnessType == "DFNB"):
             return "DFNB"
         elif (parent1DeafnessType == "DFNB" and parent2DeafnessType == "DFNB Carrier") or (parent1DeafnessType == "DFNB Carrier" and parent2DeafnessType == "DFNB"):
-            print("true")
             rand = random.randint(0,1)
             if rand == 0:
                 return "DFNB"
@@ -80,10 +79,11 @@ def create_family_tree():
     parent1GenoType = generate_deafnessType(offSpringdeafnessType=parent1PhenoType)
     parent2GenoType = generate_deafnessType(offSpringdeafnessType=parent2PhenoType)
 
+    startingY = 150
 
     #initial generation
-    draw_female_info(canvas_width // 5, 200, parent1GenoType)
-    draw_male_info(canvas_width // 5 + 300, 200, parent2GenoType)
+    draw_female_info(canvas_width // 6, startingY, parent1GenoType)
+    draw_male_info(canvas_width // 6 + 300, startingY, parent2GenoType)
 
     deafness_types.append(parent1GenoType)
     deafness_types.append(parent2GenoType)
@@ -92,18 +92,17 @@ def create_family_tree():
     
     
     # Store coordinates of the last generation's individuals
-    last_generation_coords = [(canvas_width // 5, 200), (canvas_width // 5 + 300, 200)]
+    last_generation_coords = [(canvas_width // 6, startingY), (canvas_width // 6 + 300, startingY)]
 
     for i in range(1, generations+1):
         rand = random.randint(0,1)
-        x1 = canvas_width // (5-i)
-        y1 = 200 + (i * vertical_spacing)
+        x1 = canvas_width // (6-i)
+        y1 = startingY + (i * vertical_spacing)
 
-        x2 = canvas_width // (5-i) + 300
-        y2 = 200 + (i * vertical_spacing)
+        x2 = canvas_width // (6-i) + 300
+        y2 = startingY + (i * vertical_spacing)
         if rand == 0:
             offspringGenes = generate_deafnessType(parent1DeafnessType=deafness_types[len(deafness_types) - 2], parent2DeafnessType=deafness_types[len(deafness_types) - 1])
-            print(deafness_types)
             draw_male_info(x1, y1, offspringGenes)
             genders.append("Male")
             deafness_types.append(offspringGenes)
@@ -178,7 +177,7 @@ deafness_menu.place(x=100, y=300)
 generation_label = tk.Label(root, text="What generation number up to?", font=("Roboto", 12, 'bold'))
 generation_label.place(x=100, y=400)
 
-generation_options = ["1", "2", "3"]
+generation_options = ["1", "2", "3", "4"]
 generation_menu = tk.OptionMenu(root, generation_var, *generation_options)
 generation_menu.config(width=10)
 generation_menu.place(x=100, y=425)
