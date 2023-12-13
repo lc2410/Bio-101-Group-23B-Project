@@ -215,6 +215,8 @@ deafPercentage_label3.place(x=275, y=600)
 deafCarrier_label = tk.Label(root, text=f"Deaf Carrier Percentage:\t        %", font=("Roboto", 8))
 deafCarrier_label.place(x=100, y=625)
 
+deafCarrier_label2 = tk.Label(root, textvariable=carrierPercentage, font=("Roboto", 8))
+deafCarrier_label2.place(x=275, y=625)
 
 generation_submit_button = tk.Button(root, text="Create Chart", command = create_family_tree)
 generation_submit_button.place(x=150, y=675)
