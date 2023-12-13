@@ -1,19 +1,24 @@
 import tkinter as tk
 
-# Create the main application window
-app = tk.Tk()
-app.title("My First GUI")
+def draw_half_filled_circle(canvas, x, y, radius, color):
+    canvas.create_arc(x - radius, y - radius, x + radius, y + radius, start=0, extent=180, fill=color, outline="")
 
-# Create a label widget
-label = tk.Label(app, text="Hello, Tkinter!")
-label.pack()  # Pack the label into the window
+def draw_half_filled_rectangle(canvas, x1, y1, x2, y2, color):
+    canvas.create_rectangle(x1, y1, (x1 + x2) / 2, y2, fill=color, outline="")
 
-# Create a button widget
-def on_button_click():
-    label.config(text="Button Clicked!")
+# Create the main Tkinter window
+root = tk.Tk()
+root.title("Half Filled Shape")
 
-button = tk.Button(app, text="Click me!", command=on_button_click)
-button.pack()  # Pack the button into the window
+# Create a canvas widget
+canvas = tk.Canvas(root, width=200, height=200)
+canvas.pack()
 
-# Start the main event loop
-app.mainloop()
+# Draw a half-filled circle
+draw_half_filled_circle(canvas, 100, 100, 50, "blue")
+
+# Draw a half-filled rectangle
+draw_half_filled_rectangle(canvas, 10, 10, 190, 190, "green")
+
+# Start the Tkinter event loop
+root.mainloop()
